@@ -3,7 +3,9 @@ package com.cybertek.mapper;
 import com.cybertek.dto.RoleDTO;
 import com.cybertek.entity.Role;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RoleMapper {
 
     private ModelMapper modelMapper;
