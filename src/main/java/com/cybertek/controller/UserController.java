@@ -27,11 +27,11 @@ public class UserController {
         return "/user/create";
     }
 
-//    @PostMapping("/create")
-//    public String insertUser(UserDTO user,Model model){
-//        userService.save(user);
-//        return "redirect:/user/create";  //This calls GetMapping method not HTML file.
-//    }
+    @PostMapping("/create")
+    public String insertUser(UserDTO user,Model model){
+        userService.save(user);
+        return "redirect:/user/create";  //This calls GetMapping method not HTML file.
+    }
 //
 //    @GetMapping("/update/{username}")
 //    public String editUser(@PathVariable("username") String username,Model model){
