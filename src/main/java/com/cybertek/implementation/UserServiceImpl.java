@@ -39,23 +39,38 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userMapper.convertToEntity(dto));
     }
 
+//    @Override
+//    public UserDTO update(UserDTO dto) {
+//
+//        // Find current user
+//        User user = userRepository.findByUserName(dto.getUserName());
+//
+//        // Map update user dto to entity object
+//        User convertedUser = userMapper.convertToEntity(dto);
+//
+//        // Set id to the converted object
+//        convertedUser.setId(user.getId());
+//
+//        // Save updated user
+//        userRepository.save(convertedUser);
+//
+//        return findByUserName(dto.getUserName());
+//
+//    }
+
     @Override
     public UserDTO update(UserDTO dto) {
 
-        // Find current user
+        //Find current user
         User user = userRepository.findByUserName(dto.getUserName());
-
-        // Map update user dto to entity object
+        //Map update user dto to entity object
         User convertedUser = userMapper.convertToEntity(dto);
-
-        // Set id to the converted object
+        //set id to the converted object
         convertedUser.setId(user.getId());
-
-        // Save updated user
+        //save updated user
         userRepository.save(convertedUser);
 
         return findByUserName(dto.getUserName());
-
     }
 
     // Soft Delete
