@@ -4,6 +4,7 @@ import com.cybertek.enums.Gender;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "users")
+@Where(clause = "is_deleted = false")
 public class User extends BaseEntity {
 
     private String firstName;
