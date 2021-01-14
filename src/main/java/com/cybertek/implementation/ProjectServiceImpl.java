@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
-    private ProjectMapper projectMapper;
-    private ProjectRepository projectRepository;
-    private UserMapper userMapper;
+    private final ProjectMapper projectMapper;
+    private final ProjectRepository projectRepository;
+    private final UserMapper userMapper;
 
     public ProjectServiceImpl(ProjectMapper projectMapper, ProjectRepository projectRepository, UserMapper userMapper) {
         this.projectMapper = projectMapper;
