@@ -30,6 +30,7 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskDTO> listAllTasks() {
         List<Task> list = taskRepository.findAll();
         return list.stream().map(taskMapper::convertToDTO).collect(Collectors.toList());
+//        return list.stream().map(obj -> {return taskMapper.convertToDTO(obj);}).collect(Collectors.toList());
     }
 
     @Override
