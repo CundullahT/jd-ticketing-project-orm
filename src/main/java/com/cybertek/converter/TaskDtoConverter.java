@@ -18,7 +18,7 @@ public class TaskDtoConverter implements Converter<String, TaskDTO> {
 
     @Override
     public TaskDTO convert(String source) {
-        Long id = Long.parseLong(source);
+        long id = Long.parseLong(source);
         return taskService.findById(id);
     }
 
