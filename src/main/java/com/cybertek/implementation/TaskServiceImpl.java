@@ -29,7 +29,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskDTO> listAllTasks() {
         List<Task> list = taskRepository.findAll();
-        return list.stream().map(taskMapper::convertToDTO).collect(Collectors.toList());
+        return list.stream().map(taskMapper::convertToDTO).collect(Collectors.toList());    // Double Colon Operator.
 //        return list.stream().map(obj -> {return taskMapper.convertToDTO(obj);}).collect(Collectors.toList());
     }
 
