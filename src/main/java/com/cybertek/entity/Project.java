@@ -30,6 +30,8 @@ public class Project extends BaseEntity {
     private LocalDate endDate;
 
     private String projectDetail;
+
+    @Enumerated(EnumType.STRING)
     private Status projectStatus;
 
 }
