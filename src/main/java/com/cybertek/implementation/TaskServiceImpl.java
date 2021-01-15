@@ -2,11 +2,13 @@ package com.cybertek.implementation;
 
 import com.cybertek.dto.TaskDTO;
 import com.cybertek.entity.Task;
+import com.cybertek.enums.Status;
 import com.cybertek.mapper.TaskMapper;
 import com.cybertek.repository.TaskRepository;
 import com.cybertek.service.TaskService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +37,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task save(TaskDTO dto) {
-        return null;
+        dto.setTaskStatus(Status.OPEN);
+        dto.setAssignedDate(LocalDate.now());
+        Task task = taskMapper.convertToEntity(dto);
+        return taskRepository.save(task);
     }
 
     @Override
