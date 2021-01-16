@@ -1,8 +1,10 @@
 package com.cybertek.implementation;
 
+import com.cybertek.dto.ProjectDTO;
 import com.cybertek.dto.TaskDTO;
 import com.cybertek.entity.Task;
 import com.cybertek.enums.Status;
+import com.cybertek.mapper.ProjectMapper;
 import com.cybertek.mapper.TaskMapper;
 import com.cybertek.repository.TaskRepository;
 import com.cybertek.service.TaskService;
@@ -18,10 +20,12 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
+    private final ProjectMapper projectMapper;
 
-    public TaskServiceImpl(TaskRepository taskRepository, TaskMapper taskMapper) {
+    public TaskServiceImpl(TaskRepository taskRepository, TaskMapper taskMapper, ProjectMapper projectMapper) {
         this.taskRepository = taskRepository;
         this.taskMapper = taskMapper;
+        this.projectMapper = projectMapper;
     }
 
     @Override
@@ -35,6 +39,12 @@ public class TaskServiceImpl implements TaskService {
         List<Task> list = taskRepository.findAll();
         return list.stream().map(taskMapper::convertToDTO).collect(Collectors.toList());    // Double Colon Operator.
 //        return list.stream().map(obj -> {return taskMapper.convertToDTO(obj);}).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TaskDTO> listAllByProject(ProjectDTO projectDTO) {
+        List<Task> tasks = taskRepository.findAllByProject(projectMapper.convertToEntity(projectDTO));
+        return tasks.stream().map(taskMapper::convertToDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -65,6 +75,24 @@ public class TaskServiceImpl implements TaskService {
             foundedTask.get().setIsDeleted(true);
             taskRepository.save(foundedTask.get());
         }
+    }
+
+    @Override
+    public int totalNonCompletedTasks(String projectCode) {
+        return taskRepository.totalNonCompletedTasks(projectCode);
+    }
+
+    @Override
+    public int totalCompletedTasks(String projectCode) {
+        return taskRepository.totalCompletedTasks(projectCode);
+    }
+
+    @Override
+    public void deleteByProject(ProjectDTO projectDTO) {
+
+        List<TaskDTO> taskDTOS = listAllByProject(projectDTO);
+        taskDTOS.forEach(taskDTO -> delete(taskDTO.getId()));
+
     }
 
 }

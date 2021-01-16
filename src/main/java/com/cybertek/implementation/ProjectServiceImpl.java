@@ -9,6 +9,7 @@ import com.cybertek.mapper.ProjectMapper;
 import com.cybertek.mapper.UserMapper;
 import com.cybertek.repository.ProjectRepository;
 import com.cybertek.service.ProjectService;
+import com.cybertek.service.TaskService;
 import com.cybertek.service.UserService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -23,12 +24,14 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
     private final UserMapper userMapper;
     private final UserService userService;
+    private final TaskService taskService;
 
-    public ProjectServiceImpl(ProjectMapper projectMapper, ProjectRepository projectRepository, UserMapper userMapper, UserService userService) {
+    public ProjectServiceImpl(ProjectMapper projectMapper, ProjectRepository projectRepository, UserMapper userMapper, UserService userService, TaskService taskService) {
         this.projectMapper = projectMapper;
         this.projectRepository = projectRepository;
         this.userMapper = userMapper;
         this.userService = userService;
+        this.taskService = taskService;
     }
 
     @Override
@@ -68,15 +71,29 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void complete(String projectCode) {
         Project project = projectRepository.findByProjectCode(projectCode);
+
         project.setProjectStatus(Status.COMPLETE);
+        project.setProjectCode(project.getProjectCode() + "-" + project.getId());
+
         projectRepository.save(project);
+
+        taskService.deleteByProject(projectMapper.convertToDto(project));
+
     }
 
     @Override
     public List<ProjectDTO> listAllProjectDetails() {
-        UserDTO currentUserDTO = userService.findByUserName("your.email+fakedata28301@gmail.com");
+
+        UserDTO currentUserDTO = userService.findByUserName("your.email+fakedata88540@gmail.com");
         User user = userMapper.convertToEntity(currentUserDTO);
-        return projectRepository.findAllByAssignedManager(user).stream().map(projectMapper::convertToDto).collect(Collectors.toList());
+        List<Project> projects = projectRepository.findAllByAssignedManager(user);
+
+        return projects.stream().map(project -> {
+            ProjectDTO obj = projectMapper.convertToDto(project);
+            obj.setUnfinishedTaskCount(taskService.totalNonCompletedTasks(project.getProjectCode()));
+            obj.setCompleteTaskCount(taskService.totalCompletedTasks(project.getProjectCode()));
+            return obj;
+        }).collect(Collectors.toList());
 
     }
 
