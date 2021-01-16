@@ -75,38 +75,15 @@ public class ProjectController {
         return "redirect:/project/create";
     }
 
-//    @GetMapping("/manager/complete")
-//    public String getProjectByManager(Model model){
-//
-//        UserDTO manager = userService.findById("john@cybertek.com");
-//
-//        List<ProjectDTO> projects = getCountedListOfProjectDTO(manager);
-//
-//        model.addAttribute("projects", projects);
-//
-//        return "manager/project-status";
-//
-//    }
-//
-//    List<ProjectDTO> getCountedListOfProjectDTO(UserDTO manager){
-//        List<ProjectDTO> list = projectService
-//                .findAll()
-//                .stream()
-//                .filter(x -> x.getAssignedManager().equals(manager))
-//                .map(x -> {
-//                    List<TaskDTO> taskList = taskService.findTaskByManager(manager);
-//                    int completeCount = (int) taskList.stream().filter(t -> t.getProject().equals(x) && t.getTaskStatus() == Status.COMPLETE).count();
-//                    int incompleteCount = (int) taskList.stream().filter(t -> t.getProject().equals(x) && t.getTaskStatus() != Status.COMPLETE).count();
-//
-//                    x.setCompleteTaskCount(completeCount);
-//                    x.setUnfinishedTaskCount(incompleteCount);
-//
-//                    return x;
-//
-//                }).collect(Collectors.toList());
-//
-//        return list;
-//
-//    }
+    @GetMapping("/manager/complete")
+    public String getProjectByManager(Model model){
+
+        List<ProjectDTO> projects = projectService.listAllProjectDetails();
+
+        model.addAttribute("projects", projects);
+
+        return "manager/project-status";
+
+    }
 
 }
