@@ -6972,12 +6972,17 @@ Media Query
     padding: 17px 29px;}
 }
 
-
- 
- 
-
-
+.disabled-button{
+    background: #cdcdcd;
+    color: black;
+    border-color: #cdcdcd;
+    cursor: not-allowed !important;
 }
+ 
+ 
+
+
+
 
 
 /* Custom, iPhone Retina */

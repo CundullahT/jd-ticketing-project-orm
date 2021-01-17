@@ -1,8 +1,6 @@
 package com.cybertek.controller;
 
 import com.cybertek.dto.ProjectDTO;
-import com.cybertek.dto.TaskDTO;
-import com.cybertek.dto.UserDTO;
 import com.cybertek.enums.Status;
 import com.cybertek.service.ProjectService;
 import com.cybertek.service.UserService;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/project")
