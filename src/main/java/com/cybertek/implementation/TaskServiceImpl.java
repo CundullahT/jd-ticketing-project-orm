@@ -62,6 +62,15 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<TaskDTO> listAllTasksByProjectManager() {
+
+        User user = userRepository.findByUserName("your.email+fakedata88540@gmail.com");
+        List<Task> tasks = taskRepository.findAllByProjectAssignedManager(user);
+
+        return tasks.stream().map(taskMapper::convertToDTO).collect(Collectors.toList());
+    }
+
+    @Override
     public Task save(TaskDTO dto) {
         dto.setTaskStatus(Status.OPEN);
         dto.setAssignedDate(LocalDate.now());
