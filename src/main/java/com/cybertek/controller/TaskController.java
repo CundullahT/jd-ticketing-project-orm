@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -69,46 +70,11 @@ public class TaskController {
         return "redirect:/task/create";
     }
 
-//    @GetMapping("/pending")
-//    public String pendingTasks(Model model) {
-//
-//        UserDTO employee = userService.findById("maria@cybertek.com");
-//
-//        model.addAttribute("task", new TaskDTO());
-//        model.addAttribute("tasks", taskService.findTaskByEmployee(employee));
-//        model.addAttribute("statusList", Arrays.asList(Status.COMPLETE, Status.IN_PROGRESS, Status.OPEN, Status.UAT_TEST));
-//        model.addAttribute("projects", projectService.findAll());
-//        model.addAttribute("employees", userService.findEmployees());
-//        return "/employee/pending";
-//    }
-//
-//    @GetMapping("/update/pending/{id}")
-//    public String editPendingTask(@ModelAttribute TaskDTO task, Model model) {
-//
-//        UserDTO employee = userService.findById("maria@cybertek.com");
-//
-//        model.addAttribute("task", task);
-//        model.addAttribute("tasks", taskService.findTaskByEmployee(employee));
-//        model.addAttribute("statusList", Arrays.asList(Status.COMPLETE, Status.IN_PROGRESS, Status.OPEN, Status.UAT_TEST));
-//        model.addAttribute("projects", projectService.findAll());
-//        model.addAttribute("employees", userService.findEmployees());
-//        return "/employee/update";
-//    }
-//
-//    @PostMapping("/update/pending/{id}")
-//    public String updatePendingTask(TaskDTO task) {
-//
-//        taskService.update(task);
-//        return "redirect:/task/pending";
-//    }
-//
-//    @GetMapping("/archive")
-//    public String getCompletedTasks(Model model) {
-//
-//        UserDTO employee = userService.findById("maria@cybertek.com");
-//
-//        model.addAttribute("tasks", taskService.findTaskByStatus(Status.COMPLETE).stream().filter(task -> task.getAssignedEmployee().equals(employee)).collect(Collectors.toList()));
-//        return "/employee/archive";
-//    }
+    @GetMapping("/employee")
+    public String edit(Model model){
+        List<TaskDTO> tasks = taskService.listAllTasksByStatusIsNot(Status.COMPLETE);
+        model.addAttribute("tasks", tasks);
+        return "task/employee-tasks";
+    }
 
 }

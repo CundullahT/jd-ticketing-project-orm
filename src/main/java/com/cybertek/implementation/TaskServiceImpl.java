@@ -48,6 +48,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<TaskDTO> listAllTasksByStatusIsNot(Status status) {
+        return null;
+    }
+
+    @Override
     public Task save(TaskDTO dto) {
         dto.setTaskStatus(Status.OPEN);
         dto.setAssignedDate(LocalDate.now());
