@@ -71,6 +71,17 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public void updateStatus(TaskDTO dto) {
+        Optional<Task> foundedTask = taskRepository.findById(dto.getId());
+
+        if(foundedTask.isPresent()){
+            foundedTask.get().setTaskStatus(dto.getTaskStatus());
+            taskRepository.save(foundedTask.get());
+        }
+
+    }
+
+    @Override
     public Task save(TaskDTO dto) {
         dto.setTaskStatus(Status.OPEN);
         dto.setAssignedDate(LocalDate.now());

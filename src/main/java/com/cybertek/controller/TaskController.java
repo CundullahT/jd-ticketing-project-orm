@@ -87,7 +87,7 @@ public class TaskController {
 
     @PostMapping("/employee/update/{id}")
     public String employee_update(@PathVariable("id") Long id, TaskDTO taskDTO){
-        taskService.update(taskDTO);
+        taskService.updateStatus(taskDTO);
         return "redirect:/task/employee";
     }
 
