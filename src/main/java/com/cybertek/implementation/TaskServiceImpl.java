@@ -93,7 +93,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDTO> readAllByEmployee(User user) {
-        return null;
+        List<Task> tasks = taskRepository.findAllByAssignedEmployee(user);
+        return tasks.stream().map(taskMapper::convertToDTO).collect(Collectors.toList());
     }
 
     @Override

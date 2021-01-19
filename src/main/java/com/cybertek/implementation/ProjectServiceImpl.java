@@ -100,7 +100,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectDTO> readAllByAssignedManager(User user) {
-        return null;
+        List<Project> projects = projectRepository.findAllByAssignedManager(user);
+        return projects.stream().map(projectMapper::convertToDto).collect(Collectors.toList());
     }
 
 }
