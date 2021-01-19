@@ -80,7 +80,7 @@ public class TaskController {
     @GetMapping("/employee/edit/{id}")
     public String employee_update(@PathVariable("id") Long id, Model model){
         TaskDTO task = taskService.findById(id);
-        List<TaskDTO> tasks = taskService.listAllTasksByProjectManager();
+        List<TaskDTO> tasks = taskService.listAllTasksByStatusIsNot(Status.COMPLETE);
 
         model.addAttribute("task", task);
         model.addAttribute("users", userService.listAllByRole("employee"));
