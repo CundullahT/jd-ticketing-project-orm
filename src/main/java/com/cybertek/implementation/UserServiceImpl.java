@@ -5,7 +5,7 @@ import com.cybertek.dto.TaskDTO;
 import com.cybertek.dto.UserDTO;
 import com.cybertek.entity.User;
 import com.cybertek.exception.TicketingProjectException;
-import com.cybertek.mapper.UserMapper;
+import com.cybertek.mapper.MapperUtil;
 import com.cybertek.repository.UserRepository;
 import com.cybertek.service.ProjectService;
 import com.cybertek.service.TaskService;
@@ -21,13 +21,13 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private final MapperUtil mapperUtil;
     private final ProjectService projectService;
     private final TaskService taskService;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, @Lazy ProjectService projectService, TaskService taskService) {
+    public UserServiceImpl(UserRepository userRepository, MapperUtil mapperUtil, @Lazy ProjectService projectService, TaskService taskService) {
         this.userRepository = userRepository;
-        this.userMapper = userMapper;
+        this.mapperUtil = mapperUtil;
         this.projectService = projectService;
         this.taskService = taskService;
     }
@@ -35,18 +35,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDTO> listAllUsers() {
         List<User> userList = userRepository.findAll(Sort.by("firstName"));
-        return userList.stream().map(obj -> {return userMapper.convertToDto(obj);}).collect(Collectors.toList());
+        return userList.stream().map(obj -> {return mapperUtil.convert(obj, new UserDTO());}).collect(Collectors.toList()); // We can not use mapperUtil::convert since we need to use parameters.
     }
 
     @Override
     public UserDTO findByUserName(String username) {
         User user = userRepository.findByUserName(username);
-        return userMapper.convertToDto(user);
+        return mapperUtil.convert(user, new UserDTO());
     }
 
     @Override
     public void save(UserDTO dto) {
-        userRepository.save(userMapper.convertToEntity(dto));
+        userRepository.save(mapperUtil.convert(dto, new User()));
     }
 
     @Override
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUserName(dto.getUserName());
 
         // Map update user dto to entity object
-        User convertedUser = userMapper.convertToEntity(dto);
+        User convertedUser = mapperUtil.convert(dto, new User());
 
         // Set id to the converted object
         convertedUser.setId(user.getId());
@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDTO> listAllByRole(String role) {
         List<User> users = userRepository.findAllByRoleDescriptionIgnoreCase(role);
-        return users.stream().map(obj -> {return userMapper.convertToDto(obj);}).collect(Collectors.toList());
+        return users.stream().map(obj -> {return mapperUtil.convert(obj, new UserDTO());}).collect(Collectors.toList());
     }
 
     @Override
