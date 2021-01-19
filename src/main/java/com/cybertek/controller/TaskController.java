@@ -1,21 +1,15 @@
 package com.cybertek.controller;
 
 import com.cybertek.dto.TaskDTO;
-import com.cybertek.dto.UserDTO;
 import com.cybertek.enums.Status;
 import com.cybertek.service.ProjectService;
 import com.cybertek.service.TaskService;
 import com.cybertek.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/task")
@@ -89,6 +83,12 @@ public class TaskController {
         model.addAttribute("statuses", Status.values());
 
         return "task/employee-update";
+    }
+
+    @PostMapping("/employee/update/{id}")
+    public String employee_update(@PathVariable("id") Long id, TaskDTO taskDTO){
+        taskService.update(taskDTO);
+        return "redirect:/task/employee";
     }
 
 }
