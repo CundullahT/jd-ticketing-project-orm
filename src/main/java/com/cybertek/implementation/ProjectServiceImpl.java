@@ -98,4 +98,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     }
 
+    @Override
+    public List<ProjectDTO> readAllByAssignedManager(User user) {
+        return null;
+    }
+
 }
