@@ -4,11 +4,13 @@ import com.cybertek.dto.ProjectDTO;
 import com.cybertek.dto.TaskDTO;
 import com.cybertek.dto.UserDTO;
 import com.cybertek.entity.User;
+import com.cybertek.exception.TicketingProjectException;
 import com.cybertek.mapper.UserMapper;
 import com.cybertek.repository.UserRepository;
 import com.cybertek.service.ProjectService;
 import com.cybertek.service.TaskService;
 import com.cybertek.service.UserService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +25,7 @@ public class UserServiceImpl implements UserService {
     private final ProjectService projectService;
     private final TaskService taskService;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, ProjectService projectService, TaskService taskService) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, @Lazy ProjectService projectService, TaskService taskService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.projectService = projectService;
@@ -47,35 +49,19 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userMapper.convertToEntity(dto));
     }
 
-//    @Override
-//    public UserDTO update(UserDTO dto) {
-//
-//        // Find current user
-//        User user = userRepository.findByUserName(dto.getUserName());
-//
-//        // Map update user dto to entity object
-//        User convertedUser = userMapper.convertToEntity(dto);
-//
-//        // Set id to the converted object
-//        convertedUser.setId(user.getId());
-//
-//        // Save updated user
-//        userRepository.save(convertedUser);
-//
-//        return findByUserName(dto.getUserName());
-//
-//    }
-
     @Override
     public UserDTO update(UserDTO dto) {
 
-        //Find current user
+        // Find current user
         User user = userRepository.findByUserName(dto.getUserName());
-        //Map update user dto to entity object
+
+        // Map update user dto to entity object
         User convertedUser = userMapper.convertToEntity(dto);
-        //set id to the converted object
+
+        // Set id to the converted object
         convertedUser.setId(user.getId());
-        //save updated user
+
+        // Save updated user
         userRepository.save(convertedUser);
 
         return findByUserName(dto.getUserName());
@@ -84,8 +70,14 @@ public class UserServiceImpl implements UserService {
     // Soft Delete
 
     @Override
-    public void delete(String username) {
+    public void delete(String username) throws TicketingProjectException {
         User user = userRepository.findByUserName(username);
+
+        if (user == null) throw new TicketingProjectException("User Does Not Exists.");
+
+        if (!checkIfUserCanBeDeleted(user)) throw new TicketingProjectException("User Can Not Be Deleted. It Is Linked By A Project Or Task.");
+
+        user.setUserName(user.getUserName() + "-" + user.getId());
         user.setIsDeleted(true);
         userRepository.save(user);
     }
